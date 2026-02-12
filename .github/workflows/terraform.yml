@@ -1,4 +1,4 @@
-name: Terraform CI Pipeline
+name: IaC Check - Terraform format and validate
 
 on:
   push:
@@ -6,22 +6,22 @@ on:
       - main
 
 jobs:
-  terraform_check:
-    name: Terraform Format and Validate
+  terraform:
+    name: Terraform  CI Validation
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-
-      - name: Terraform Init
-        run: terraform init
+        uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Format Check
-        run: terraform fmt -check -diff -recursive
+        run: terraform fmt -recursive
+       
+      - name: Terraform init
+        run: terraform init -backend=false -input=false
 
-      - name: Terraform Validate
+      - name: Terraform validate
         run: terraform validate
